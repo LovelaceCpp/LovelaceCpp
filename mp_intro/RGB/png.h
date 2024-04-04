@@ -6,7 +6,6 @@
  * @author Chase Geigle
  * @date Created: Spring 2012
  * @date Modified: Summer 2012
- * @date Modified by Sean Massung in Summer 2013, s/int/size_t
  */
 #ifndef EPNG_H
 #define EPNG_H
@@ -46,7 +45,7 @@ class PNG
          * @param width Width of the new image.
          * @param height Height of the new image.
          */
-        PNG(size_t width, size_t height);
+        PNG(int width, int height);
 
         /**
          * Creates a PNG image by reading a file in from disk.
@@ -96,7 +95,7 @@ class PNG
          * @param y Y-coordinate for the pixel pointer to be grabbed from.
          * @return A pointer to the pixel at the given coordinates.
          */
-        RGBAPixel * operator()(size_t x, size_t y);
+        RGBAPixel * operator()(int x, int y);
 
         /**
          * Const pixel access operator. Const version of the previous
@@ -107,7 +106,7 @@ class PNG
          * @return A pointer to the pixel at the given coordinates (can't
          *	change the pixel through this pointer).
          */
-        RGBAPixel const * operator()(size_t x, size_t y) const;
+        RGBAPixel const * operator()(int x, int y) const;
 
         /**
          * Reads in a PNG image from a file.
@@ -129,13 +128,13 @@ class PNG
          * Gets the width of this image.
          * @return Width of the image.
          */
-        size_t width() const;
+        int width() const;
 
         /**
          * Gets the height of this image.
          * @return Height of the image.
          */
-        size_t height() const;
+        int height() const;
 
         /**
          * Resizes the image to the given coordinates. Attempts to preserve
@@ -144,12 +143,12 @@ class PNG
          * @param width New width of the image.
          * @param height New height of the image.
          */
-        void resize(size_t width, size_t height);
+        void resize(int width, int height);
 
     private:
         // storage
-        size_t _width;
-        size_t _height;
+        int _width;
+        int _height;
         RGBAPixel * _pixels;
 
         // private helper functions
@@ -158,12 +157,12 @@ class PNG
         void _copy(PNG const & other);
         void _blank();
         void _init();
-        void _min_clamp_x(size_t & width) const;
-        void _min_clamp_y(size_t & height) const;
-        void _min_clamp_xy(size_t & width, size_t & height) const;
-        void _clamp_xy(size_t & width, size_t & height) const;
-        bool _pixels_same(const RGBAPixel & first, const RGBAPixel & second) const;
-        RGBAPixel & _pixel(size_t x, size_t y) const;
+        void _min_clamp_x(int & width) const;
+        void _min_clamp_y(int & height) const;
+        void _min_clamp_xy(int & width, int & height) const;
+        void _clamp_xy(int & width, int & height) const;
+        bool _pixels_same( const RGBAPixel & first, const RGBAPixel & second ) const;
+        RGBAPixel & _pixel(int x, int y) const;
 };
 
 #endif // EPNG_H

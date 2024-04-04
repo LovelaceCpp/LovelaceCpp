@@ -8,18 +8,14 @@
  * @date Modified: Summer 2012
  */
 
-#include <cstdint>
-
 #include "png.h"
-
-using std::uint8_t;
 
 inline void epng_err(string const & err)
 {
 	cerr << "[EasyPNG]: " << err << endl;
 }
 
-RGBAPixel & PNG::_pixel(size_t x, size_t y) const
+RGBAPixel & PNG::_pixel(int x, int y) const
 {
 	return _pixels[_width * y + x];
 }
@@ -35,9 +31,9 @@ void PNG::_copy(PNG const & other)
 	_width = other._width;
 	_height = other._height;
 	_pixels = new RGBAPixel[_height * _width];
-	for (size_t y = 0; y < _height; y++)
+	for (int y = 0; y < _height; y++)
 	{
-		for (size_t x = 0; x < _width; x++)
+		for (int x = 0; x < _width; x++)
 		{
 			_pixel(x,y) = other._pixel(x,y);
 		}
@@ -46,9 +42,9 @@ void PNG::_copy(PNG const & other)
 
 void PNG::_blank()
 {
-	for (size_t y = 0; y < _height; y++)
+	for (int y = 0; y < _height; y++)
 	{
-		for (size_t x = 0; x < _width; x++)
+		for (int x = 0; x < _width; x++)
 		{
 			RGBAPixel & curr = _pixel(x,y);
 			curr.red = 255;
@@ -69,13 +65,13 @@ void PNG::_init()
 	_blank();
 }
 
-void PNG::_min_clamp_xy(size_t & width_arg, size_t & height_arg) const
+void PNG::_min_clamp_xy(int & width_arg, int & height_arg) const
 {
 	_min_clamp_x(width_arg);
 	_min_clamp_y(height_arg);
 }
 
-void PNG::_min_clamp_x(size_t & width_arg) const
+void PNG::_min_clamp_x(int & width_arg) const
 {
 	if (width_arg <= 0)
 	{
@@ -85,7 +81,7 @@ void PNG::_min_clamp_x(size_t & width_arg) const
 
 }
 
-void PNG::_min_clamp_y(size_t & height_arg) const
+void PNG::_min_clamp_y(int & height_arg) const
 {
 	if (height_arg <= 0)
 	{
@@ -94,12 +90,16 @@ void PNG::_min_clamp_y(size_t & height_arg) const
 	}
 }
 
-void PNG::_clamp_xy(size_t & x, size_t & y) const
+void PNG::_clamp_xy(int & x, int & y) const
 {
-	size_t i = x;
-	size_t j = y;
+	int i = x;
+	int j = y;
+	if (x < 0)
+		x = 0;
 	if (x >= _width)
 		x = _width - 1;
+	if (y < 0)
+		y = 0;
 	if (y >= _height)
 		y = _height - 1;
 
@@ -120,7 +120,7 @@ PNG::PNG()
 	_init();
 }
 
-PNG::PNG(size_t width_arg, size_t height_arg)
+PNG::PNG(int width_arg, int height_arg)
 {
 	_width = width_arg;
 	_height = height_arg;
@@ -162,9 +162,9 @@ bool PNG::operator==(PNG const & other) const
 {
 	if (_width != other._width || _height != other._height)
 		return false;
-	for (size_t y = 0; y < _height; y++)
+	for (int y = 0; y < _height; y++)
 	{
-		for (size_t x = 0; x < _width; x++)
+		for (int x = 0; x < _width; x++)
 		{
             if( !_pixels_same( _pixel( x, y ), other._pixel( x, y ) ) )
 				return false;
@@ -178,13 +178,13 @@ bool PNG::operator!=(PNG const & other) const
 	return !(*this == other);
 }
 
-RGBAPixel * PNG::operator()(size_t x, size_t y)
+RGBAPixel * PNG::operator()(int x, int y)
 {
 	_clamp_xy(x, y);
 	return &(_pixel(x,y));
 }
 
-RGBAPixel const * PNG::operator()(size_t x, size_t y) const
+RGBAPixel const * PNG::operator()(int x, int y) const
 {
 	_clamp_xy(x, y);
 	return &(_pixel(x,y));
@@ -301,32 +301,32 @@ bool PNG::_read_file(string const & file_name)
 	// initialie our image storage
 	_pixels = new RGBAPixel[_height * _width];
 	png_byte * row = new png_byte[bpr];
-	for (size_t y = 0; y < _height; y++)
+	for (int y = 0; y < _height; y++)
 	{
 		png_read_row(png_ptr, row, NULL);
 		png_byte * pix = row;
-		for (size_t x = 0; x < _width; x++)
+		for (int x = 0; x < _width; x++)
 		{
 			RGBAPixel & pixel = _pixel(x,y);
 			if (numchannels == 1 || numchannels == 2)
 			{
 				// monochrome
-				uint8_t color = (uint8_t) *pix++;
+				unsigned char color = (unsigned char) *pix++;
 				pixel.red = color;
 				pixel.green = color;
 				pixel.blue = color;
 				if (numchannels == 2)
-					pixel.alpha = (uint8_t) *pix++;
+					pixel.alpha = (unsigned char) *pix++;
 				else
 					pixel.alpha = 255;
 			} 
 			else if (numchannels == 3 || numchannels == 4) 
 			{
-				pixel.red = (uint8_t) *pix++;
-				pixel.green = (uint8_t) *pix++;
-				pixel.blue = (uint8_t) *pix++;
+				pixel.red = (unsigned char) *pix++;
+				pixel.green = (unsigned char) *pix++;
+				pixel.blue = (unsigned char) *pix++;
 				if (numchannels == 4)
-					pixel.alpha = (uint8_t) *pix++;
+					pixel.alpha = (unsigned char) *pix++;
 				else
 					pixel.alpha = 255;
 			}
@@ -404,9 +404,9 @@ bool PNG::writeToFile(string const & file_name)
 
 	int bpr = png_get_rowbytes(png_ptr, info_ptr);
 	png_byte * row = new png_byte[bpr];
-	for (size_t y = 0; y < _height; y++)
+	for (int y = 0; y < _height; y++)
 	{
-		for (size_t x = 0; x < _width; x++)
+		for (int x = 0; x < _width; x++)
 		{
 			png_byte * pix = &(row[x*4]);
 			pix[0] = _pixel(x,y).red;
@@ -423,17 +423,17 @@ bool PNG::writeToFile(string const & file_name)
 	return true;
 }
 
-size_t PNG::width() const
+int PNG::width() const
 {
 	return _width;
 }
 
-size_t PNG::height() const
+int PNG::height() const
 {
 	return _height;
 }
 
-void PNG::resize(size_t width_arg, size_t height_arg)
+void PNG::resize(int width_arg, int height_arg)
 {
 	_min_clamp_xy(width_arg, height_arg);
 	if (width_arg == _width && height_arg == _height)
@@ -448,10 +448,10 @@ void PNG::resize(size_t width_arg, size_t height_arg)
 		arr = new RGBAPixel[width_arg*height_arg];
 
 	// copy over pixels
-	size_t min_width = (width_arg > _width) ? _width : width_arg;
-	size_t min_height = (height_arg > _height) ? _height : height_arg;
-	for (size_t x = 0; x < min_width; x++)
-		for (size_t y = 0; y < min_height; y++)
+	int min_width = (width_arg > _width) ? _width : width_arg;
+	int min_height = (height_arg > _height) ? _height : height_arg;
+	for (int x = 0; x < min_width; x++)
+		for (int y = 0; y < min_height; y++)
 			arr[x + y * width_arg] = _pixel(x,y);
 
 	// set new array if needed

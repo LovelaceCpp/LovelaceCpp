@@ -1,3 +1,4 @@
+#include<iostream>
 #include "RGB/png.h"
 #include "RGB/rgbapixel.h"
 

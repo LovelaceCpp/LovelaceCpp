@@ -26,6 +26,11 @@ class Allocator
          */
         Allocator(const string & studentFile, const string & roomFile);
 
+        ~Allocator();  
+
+
+        //.......................
+
         /**
          * Calls the solving routine to allocate student letter
          *  groups to rooms.
