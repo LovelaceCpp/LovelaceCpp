@@ -17,73 +17,75 @@
  */
 class Shape : public Drawable
 {
-	protected:
-		Vector2 center_;
+protected:
+	Vector2 center_;
 
-	private:
-		RGBAPixel color_;
+private:
+	RGBAPixel color_;
 
-	public:
-		/**
-		 * @brief Constructs a new Shape with a default color and center
-		 */
-		Shape();
+public:
+	/**
+	 * @brief Constructs a new Shape with a default color and center
+	 */
+	Shape();
 
-		/**
-		 * @brief Constructs a new Shape with the given center and color
-		 *
-		 * @param center Vector2 of the new Shape
-		 * @param color of the new Shape
-		 */
-		Shape(const Vector2& center, const RGBAPixel& color);
+	/**
+	 * @brief Constructs a new Shape with the given center and color
+	 *
+	 * @param center Vector2 of the new Shape
+	 * @param color of the new Shape
+	 */
+	Shape(const Vector2 &center, const RGBAPixel &color);
 
-		~Shape() { /* Nothing */ }
+   virtual ~Shape() // ------- must be virtual to delete derived
+	{ /* Nothing */
+	}
 
-		/**
-		 * @brief Computes and returns the area of the Shape in pixels
-		 *
-		 * @return the area (in pixels) of the Shape 
-		 */
-		int area() const;
+	/**
+	 * @brief Computes and returns the area of the Shape in pixels
+	 *
+	 * @return the area (in pixels) of the Shape
+	 */
+	virtual  int area() const; // -- --- 
 
-		/**
-		 * @brief Computes and returns the perimeter of the Shape in pixels
-		 *
-		 * @return the perimeter (in pixels) of the Shape
-		 */
-		int perimeter() const;
+	/**
+	 * @brief Computes and returns the perimeter of the Shape in pixels
+	 *
+	 * @return the perimeter (in pixels) of the Shape
+	 */
+	virtual int perimeter() const; // --- -- 
 
-		/**
-		 * @brief Checks to see if the Vector2 p is contained inside of the Shape
-		 *
-		 * @param p Vector2 to check if it is contained inside the Shape or not
-		 *
-		 * @return true if Vector2 p is inside of the Shape
-		 */
-		bool contains(const Vector2& p) const;
+	/**
+	 * @brief Checks to see if the Vector2 p is contained inside of the Shape
+	 *
+	 * @param p Vector2 to check if it is contained inside the Shape or not
+	 *
+	 * @return true if Vector2 p is inside of the Shape
+	 */
+	bool contains(const Vector2 &p) const;
 
-		/**
-		 * @brief Gets the center Vector2 of the Shape
-		 *
-		 * @return the center Vector2 of the Shape
-		 */
-		Vector2 center() const;
+	/**
+	 * @brief Gets the center Vector2 of the Shape
+	 *
+	 * @return the center Vector2 of the Shape
+	 */
+	Vector2 center() const;
 
-		/**
-		 * @brief Sets the center Vector2 of the Shape
-		 *
-		 * @param center the new center Vector2 of the Shape
-		 */
-		virtual void set_center(const Vector2& center);
+	/**
+	 * @brief Sets the center Vector2 of the Shape
+	 *
+	 * @param center the new center Vector2 of the Shape
+	 */
+	virtual void set_center(const Vector2 &center);
 
-		/**
-		 * @brief Gets the color of the Shape
-		 *
-		 * @return the RGBAPixel representing the color of the Shape
-		 */
-		RGBAPixel color() const;
+	/**
+	 * @brief Gets the color of the Shape
+	 *
+	 * @return the RGBAPixel representing the color of the Shape
+	 */
+	RGBAPixel color() const;
 
-		void draw(PNG* canvas) const;
+	void draw(PNG *canvas) const;
 };
 
-#endif  // SHAPE_H_
+#endif // SHAPE_H_

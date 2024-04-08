@@ -14,6 +14,7 @@
 
 const double PI = 3.141592;
 
+
 Circle::Circle(const Vector2& pcenter, const RGBAPixel& pcolor, int pradius)
 	: radius_(pradius)
 {

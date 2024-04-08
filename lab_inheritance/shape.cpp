@@ -51,7 +51,7 @@ Vector2 Shape::center() const
 	return this->center_;
 }
 
-void Shape::set_center(const Vector2& pcenter) { 
+void Shape::set_center(const Vector2& pcenter)  { 
 	this->center_ = pcenter;
 }
 
@@ -60,7 +60,7 @@ RGBAPixel Shape::color() const
 	return this->color_;
 }
 
-void Shape::draw(PNG* canvas) const
+void Shape::draw(PNG* canvas) const  
 {
 	const Vector2 top_left(this->center().x() - 8, this->center().y() - 8); 
 	const Vector2 top_right(this->center().x() + 8, this->center().y() - 8); 
