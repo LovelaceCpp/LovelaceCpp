@@ -78,6 +78,10 @@ PNG brighten(PNG original, int amount)
                 blue_val = 255;
             }
             original(xi, yi)->blue = blue_val;
+
+            // original(xi, yi)->red = min(original(xi, yi)->red + amount, 255); // use min()to get the minimun
+            // original(xi, yi)->green = min(original(xi, yi)->green + amount, 255);
+            // original(xi, yi)->blue = min(original(xi, yi)->blue + amount, 255);
         }
     }
     return original;
@@ -112,7 +116,9 @@ PNG blendImages(PNG firstImage, PNG secondImage)
             int blue_2 = secondImage(xi, yi)->blue;
             firstImage(xi, yi)->blue = (blue_1 + blue_2) / 2;
 
-
+            // firstImage(xi, yi)->red = (firstImage(xi, yi)->red + secondImage(xi, yi)->red) / 2;
+            // firstImage(xi, yi)->green = (firstImage(xi, yi)->green + secondImage(xi, yi)->green) / 2;
+            // firstImage(xi, yi)->blue = (firstImage(xi, yi)->blue + secondImage(xi, yi)->blue) / 2;
         }
     }
     return firstImage;

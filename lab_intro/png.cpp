@@ -1,4 +1,4 @@
-/**
+ /**
  * @file png.cpp
  * Implementation of the PNG class for the EasyPNG library.
  * @see http://zarb.org/~gc/html/libpng.html
