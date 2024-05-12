@@ -24,4 +24,4 @@ public:
     
 };
 
-#endif
+#endif // RGBAPIXEL_H

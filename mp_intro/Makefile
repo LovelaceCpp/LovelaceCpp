@@ -1,32 +1,30 @@
-EXE  = intro
-OBJS = main.o intro.o  rgbapixel.o  png.o 
-COMPILER  = g++
-COMPILER_OPTS = -c -g -O0 -Wall -Werror
-LINKER = g++
-LINKER_OPTS = -lpng
+EXE=intro 
+OBJS = main.o intro.o rgbapixel.o png.o 
+CXX = g++ 
+CXXFLAGS = -c -g -O0 -Wall -Werror
+LD = g++
+LDFLAGS= -lpng 
 
-RGBDIR = RGB
+SRC = RGB
 
 intro : $(EXE)
 
-$(EXE): $(OBJS)
-	$(LINKER) $(OBJS) $(LINKER_OPTS) -o $(EXE)
+$(EXE) : $(OBJS)
+	$(LD) $(OBJS) $(LDFLAGS) -o $(EXE) 
+	
+main.o : main.cpp intro.h $(SRC)/png.h
+	$(CXX) $(CXXFLAGS) main.cpp
 
-main.o : main.cpp intro.h $(RGBDIR)/png.h
-	$(COMPILER) $(COMPILER_OPTS) main.cpp
+intro.o : intro.cpp intro.h $(SRC)/png.h $(SRC)/rgbapixel.h
+	$(CXX) $(CXXFLAGS) intro.cpp
 
-
-intro.o: intro.h intro.cpp $(RGBDIR)/png.h $(RGBDIR)/rgbapixel.h
-	$(COMPILER) $(COMPILER_OPTS) intro.cpp
-
-
-png.o : RGB/png.cpp RGB/png.h RGB/rgbapixel.h
-	$(COMPILER) $(COMPILER_OPTS) RGB/png.cpp
-
-rgbapixel.o : RGB/rgbapixel.cpp RGB/rgbapixel.h
-	$(COMPILER) $(COMPILER_OPTS) RGB/rgbapixel.cpp
+png.o : $(SRC)/png.cpp $(SRC)/png.h $(SRC)/rgbapixel.h
+	$(CXX) $(CXXFLAGS) RGB/png.cpp
 
 
-clean : 
-	rm -f *.o $(EXE)
-      	
+rgbapixel.o : $(SRC)/rgbapixel.cpp $(SRC)/rgbapixel.h
+	$(CXX) $(CXXFLAGS) $(SRC)/rgbapixel.cpp
+
+clean :
+	rm *.o  intro 
+
